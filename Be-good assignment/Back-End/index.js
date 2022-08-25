@@ -16,8 +16,9 @@ app.use(bodyParser.json());
 
 
 //get routes
+const AuthRoutes=require('./Routes/Auth.Routes')
 //use routes
-
+app.use("/api/v1/auth",AuthRoutes);
 
 //sample server side
 app.get("/", (req, res) => {
