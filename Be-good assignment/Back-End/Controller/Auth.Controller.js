@@ -45,6 +45,6 @@ const Register = asyncHandler(async (req, res) => {
         carType= "old"
         res.send({ msg: "old" });
     }
-})
+});
 
 module.exports = { Register };

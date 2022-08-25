@@ -8,4 +8,5 @@ const {Register}=require('../Controller/Auth.Controller')
 router.route('/register').post(Register);
 
 
+
 module.exports = router

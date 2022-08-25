@@ -25,6 +25,9 @@ const Vehicle_DetailsSchema = new mongoose.Schema(
     chassisNo: {
         type: String,
     },
+    Vehicle_Type: {
+      type: String,
+  },
   },
   { timestamps: true }
 );
