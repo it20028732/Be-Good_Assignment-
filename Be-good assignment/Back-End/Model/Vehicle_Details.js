@@ -9,6 +9,7 @@ const Vehicle_DetailsSchema = new mongoose.Schema(
     email: {
       type: String,
       required: [true, "Please provide email"],
+      unique: true,
     },
     password: {
         type: String,
@@ -21,6 +22,7 @@ const Vehicle_DetailsSchema = new mongoose.Schema(
     },
     plateNo: {
         type: String,
+        unique: true,
     },
     chassisNo: {
         type: String,

@@ -41,5 +41,6 @@ const Vtype = asyncHandler(async (req, res) => {
         res.send({ data: carType,msg: "cartype Found" });
     }
 });
+//get one vehicle
 
 module.exports = { Vtype };
