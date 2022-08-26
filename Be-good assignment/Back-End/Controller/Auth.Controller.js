@@ -36,6 +36,7 @@ const Register = asyncHandler(async (req, res) => {
     try {
         //check if email || plate already exists
         const findEmail = await Vehicle_Details.findOne({ email: email });
+
         const findPlate = await Vehicle_Details.findOne({ plateNo: plateNo });
         if (findEmail) {
             res.send({ msg: "Email already exist" });

@@ -1,7 +1,7 @@
 const { isTokenValid } = require('../utils')
 
-//authenticate user
-const authenticateUser = async (req, res, next) => {
+//authenticate reg
+const authenticateReg = async (req, res, next) => {
     const authHeader = req.headers.authorization
   
     if (!authHeader || !authHeader.startsWith('Bearer')) {
@@ -14,8 +14,8 @@ const authenticateUser = async (req, res, next) => {
     const token = authHeader.split(' ')[1]
   
     try {
-      const { id, email, accountType } = isTokenValid({ token })
-      req.user = { id, email, accountType }
+      const {docID,Name,email, accountType,plateNo,chassisNo } = isTokenValid({ token })
+      req.reg = {docID,Name,email, accountType,plateNo,chassisNo}
       next()
     } catch (error) {
         res.send({ msg: "Authentication Failed" });
@@ -30,7 +30,7 @@ const authorizePermissions = (...accountType) => {
     return (req, res, next) => {
     
       //prevent anauthorized user from accessing route
-      if (!accountType.includes(req.user.accountType)) {
+      if (!accountType.includes(req.reg.accountType)) {
         res.send({ msg: "Unauthorized to access this route" });
         throw new Errorr(
           'Unauthorized to access this route'
@@ -41,6 +41,6 @@ const authorizePermissions = (...accountType) => {
 }
 
   module.exports = {
-    authenticateUser,
+    authenticateReg,
     authorizePermissions,
   }
