@@ -3,25 +3,14 @@ import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { reset } from "../features/authSlice";
 import { logout } from "../features/authSlice";
+import NavBar from "../components/NavBar";
 
 
 const Dashboard = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    const onLogout = async () => {
-        await dispatch(logout());
-        await dispatch(reset());
-        navigate("/");
-      };
-    return (<>Dashboard
-            <a 
-                href=""
-                  onClick={onLogout}
-                >
-                  Sign Out
-                </a>
-
+    return (<> <NavBar />
     </>)
 }
 
