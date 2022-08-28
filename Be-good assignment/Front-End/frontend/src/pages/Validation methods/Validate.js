@@ -36,3 +36,14 @@ export function vintage(plateNo) {
     return -1;
   }
 }
+export function old(plateNo) {
+  const withOutWS=/(^[0-9]{3}-[0-9]{4}$)|(^[0-9]{2}-[0-9]{4}$)/
+  const withWS=/(^[0-9]{2}\s-\s[0-9]{4}$)|(^[0-9]{3}\s-\s[0-9]{4}$)/
+  if (withWS.test(plateNo) || withOutWS.test(plateNo)) {
+    console.log("valid")
+    return 1
+  } else {
+    console.log("invalid")
+    return -1
+  }
+}

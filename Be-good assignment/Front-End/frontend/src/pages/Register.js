@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
-import { modern,vintage } from "./Validation methods/Validate";
+import { modern,old,vintage } from "./Validation methods/Validate";
 
 const Register = () => {
   //hook to display validation status
@@ -39,15 +39,21 @@ const Register = () => {
 
         if (1) {setDisabled(false);} 
         else {setDisabled(true);}
-
+      //if number plate is vintage
       } else if (response.data.data === "vintage") {
         const response = await vintage(plateNo);
         setValidateStatus(response);
 
         if (1) {setDisabled(false);} 
         else {setDisabled(true);}
-
+      //if number plate is old
       } else if (response.data.data === "old") {
+        const response = await old(plateNo);
+        setValidateStatus(response);
+
+        if (1) {setDisabled(false);} 
+        else {setDisabled(true);}
+        
       } else {
         window.alert("error in validating");
       }
@@ -166,7 +172,6 @@ const Register = () => {
               </label>
             </div>
             <div class="relative z-0 mb-6 w-full group">
-              {plateNo}
               <button onClick={validatePlate}>
                 {/* if needed to be validated */}
                 {validateStatus === 0 && (
