@@ -60,7 +60,7 @@ const getOneVehicle = asyncHandler(async (req, res) => {
 //get all registration details
 const getAllVehicle = asyncHandler(async (req, res) => {
   try {
-    res.status(201).json(await Vehicle_Details.find({}))
+    res.status(201).json(await Vehicle_Details.find({accountType:"customer"}))
   } catch (error) {
     console.log(error)
     res.send({ msg: "errorr" });

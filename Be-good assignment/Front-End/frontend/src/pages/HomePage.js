@@ -8,6 +8,14 @@ import NavBar from "../components/NavBar";
 const HomePage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  
+  const ViewALL = (e) => {
+    if (window.confirm("Login With Admin Credentials\nEmail: admin@gmail.com\npassword: admin") === true) {
+      navigate('/login')
+    } else {
+      return
+    }
+  }
 
   return (
     <>
@@ -33,6 +41,15 @@ const HomePage = () => {
             </div>
           </div>
         </nav>
+        <div className="p-1">
+          <button
+            type="button"
+            className="text-white focus:outline-none font-medium rounded-lg text-base px-6 py-3.5 text-center bg-gray-800 hover:bg-gray-700 focus:ring-blue-800"
+            onClick={ViewALL}
+          >
+            View All registrations
+          </button>
+        </div>
         <div className="flex min-h-screen items-center bg-white">
           <div className="container mx-auto">
             <div className="mx-auto mb-5 max-w-md">
