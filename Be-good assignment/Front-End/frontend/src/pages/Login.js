@@ -109,7 +109,7 @@ const Login = () => {
                 <div className="mb-6">
                   <button
                     type="button"
-                    className="w-full rounded-md bg-[#111827] px-3 py-2 text-white focus:outline-none"
+                    className="w-full rounded-md bg-gray-900 hover:bg-gray-700  px-3 py-2 text-white focus:outline-none"
                     onClick={(e) => onSubmit(e)}
                   >
                     Sign in

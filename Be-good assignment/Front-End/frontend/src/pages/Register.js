@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
-import { modern,old,vintage } from "./Validation methods/Validate";
+import { modern, old, vintage } from "./Validation methods/Validate";
 
 const Register = () => {
   //hook to display validation status
@@ -37,23 +37,31 @@ const Register = () => {
         console.log(response);
         setValidateStatus(response);
 
-        if (1) {setDisabled(false);} 
-        else {setDisabled(true);}
-      //if number plate is vintage
+        if (1) {
+          setDisabled(false);
+        } else {
+          setDisabled(true);
+        }
+        //if number plate is vintage
       } else if (response.data.data === "vintage") {
         const response = await vintage(plateNo);
         setValidateStatus(response);
 
-        if (1) {setDisabled(false);} 
-        else {setDisabled(true);}
-      //if number plate is old
+        if (1) {
+          setDisabled(false);
+        } else {
+          setDisabled(true);
+        }
+        //if number plate is old
       } else if (response.data.data === "old") {
         const response = await old(plateNo);
         setValidateStatus(response);
 
-        if (1) {setDisabled(false);} 
-        else {setDisabled(true);}
-        
+        if (1) {
+          setDisabled(false);
+        } else {
+          setDisabled(true);
+        }
       } else {
         window.alert("error in validating");
       }
@@ -68,9 +76,25 @@ const Register = () => {
     setDisabled(true);
   }, [plateNo]);
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
-    console.log("works");
+    if (password !== password2) {
+      window.alert("passwords dont match");
+      return;
+    }
+    const url = `/api/v1/auth/register`;
+    const response = await axios.post(url, {
+      Name: name,
+      email: email,
+      password: password,
+      accountType: "customer",
+      plateNo: plateNo,
+      chassisNo: chassisNo,
+    });
+    window.alert(response.data.msg);
+    if (response.data.msg === "registered") {
+      document.getElementById("regForm").reset();
+    }
   };
   return (
     <div>
@@ -92,15 +116,19 @@ const Register = () => {
       <div className="mt-10 sm:mt-0 pt-10 pr-56 pl-56 ">
         <div className="md:col-span-1">
           <div className="px-1 sm:px-0">
-            <div className="flex justify-center ...">
-              <h1 className="my-2 text-3xl  font-semibold text-gray-700">
-                Registration
+            <div className="flex flex-col items-center text-center">
+              <h1 className="my-2 text-3xl font-semibold text-gray-700">
+                Register
               </h1>
+              <p className="text-gray-500">
+                Register new vehicle to create new account
+              </p>
             </div>
             <br />
           </div>
         </div>
         <form
+          id="regForm"
           onSubmit={onSubmit}
           className="rounded-lg bg-gray-50 shadow-2xl  p-10"
         >
@@ -112,6 +140,7 @@ const Register = () => {
               className="block py-2.5 px-0 w-full text-sm  bg-transparent border-0 border-b-2  appearance-none text-black border-gray-600 focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
               placeholder=" "
               required
+              onChange={(e) => setName(e.target.value)}
             />
             <label
               for="name"
@@ -128,6 +157,8 @@ const Register = () => {
               className="block py-2.5 px-0 w-full text-sm  bg-transparent border-0 border-b-2  appearance-none text-black border-gray-600 focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
               placeholder=" "
               required
+              minlength="8"
+              onChange={(e) => setPassword(e.target.value)}
             />
             <label
               for="floating_password"
@@ -144,6 +175,8 @@ const Register = () => {
               className="block py-2.5 px-0 w-full text-sm  bg-transparent border-0 border-b-2  appearance-none text-black border-gray-600 focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
               placeholder=" "
               required
+              minlength="8"
+              onChange={(e) => setPassword2(e.target.value)}
             />
             <label
               for="floating_repeat_password"
@@ -156,7 +189,7 @@ const Register = () => {
             <div class="relative z-0 mb-6 w-full group">
               <input
                 type="text"
-                //pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+                //pattern="[0-9]{3}"
                 name="plateNo"
                 id="plateNo"
                 className="block py-2.5 px-0 w-full text-sm  bg-transparent border-0 border-b-2  appearance-none text-black border-gray-600 focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
@@ -198,12 +231,13 @@ const Register = () => {
             <div class="relative z-0 mb-6 w-full group">
               <input
                 type="text"
-                //pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
                 name="chassisNo"
                 id="chassisNo"
                 className="block py-2.5 px-0 w-full text-sm  bg-transparent border-0 border-b-2  appearance-none text-black border-gray-600 focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                 placeholder=" "
                 required
+                minlength="8"
+                onChange={(e) => setChassisNo(e.target.value)}
               />
               <label
                 for="chassisNo"
@@ -221,6 +255,7 @@ const Register = () => {
                 className="block py-2.5 px-0 w-full text-sm  bg-transparent border-0 border-b-2  appearance-none text-black border-gray-600 focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                 placeholder=" "
                 required
+                onChange={(e) => setEmail(e.target.value)}
               />
               <label
                 for="floating_email"
@@ -235,7 +270,7 @@ const Register = () => {
               <button
                 title="Validate Plate"
                 type="submit"
-                class="text-white hover:bg-red-500 bg-blue-500 cursor-not-allowed font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                class="text-white hover:bg-red-500 bg-gray-800 cursor-not-allowed font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                 disabled={disabled}
               >
                 Register
@@ -245,12 +280,20 @@ const Register = () => {
           {disabled === false && (
             <button
               type="submit"
-              class="text-white hover:bg-green-700 bg-blue-500 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+              class="text-white hover:bg-green-700 bg-gray-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
               disabled={disabled}
             >
               Register
             </button>
           )}
+          <div class="flex justify-center ...">
+            <p className="text-gray-500 ">
+              Already have an account?{" "}
+              <a className="text-blue-500" href="/login">
+                Login Here
+              </a>
+            </p>
+          </div>
         </form>
       </div>
     </div>
