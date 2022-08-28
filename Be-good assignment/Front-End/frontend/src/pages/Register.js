@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
-import { modern } from "./Validation methods/Validate";
+import { modern,vintage } from "./Validation methods/Validate";
 
 const Register = () => {
   //hook to display validation status
@@ -41,6 +41,11 @@ const Register = () => {
         else {setDisabled(true);}
 
       } else if (response.data.data === "vintage") {
+        const response = await vintage(plateNo);
+        setValidateStatus(response);
+
+        if (1) {setDisabled(false);} 
+        else {setDisabled(true);}
 
       } else if (response.data.data === "old") {
       } else {
