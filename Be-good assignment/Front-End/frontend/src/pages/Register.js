@@ -1,8 +1,66 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
+import axios from "axios";
+import { modern } from "./Validation methods/Validate";
 
 const Register = () => {
+  //hook to display validation status
+  const [validateStatus, setValidateStatus] = useState(0);
+  //enable diable submit button based o validation
+  const [disabled, setDisabled] = useState(true);
+  //vehicle plate type
+  const [vehicleType, setVehicleType] = useState("");
+
+  //form data
+  const [name, setName] = useState("");
+  const [password, setPassword] = useState("");
+  const [password2, setPassword2] = useState("");
+  const [plateNo, setPlateNo] = useState("");
+  const [chassisNo, setChassisNo] = useState("");
+  const [email, setEmail] = useState("");
+
+  //validate number plate
+  const validatePlate = async (e) => {
+    e.preventDefault();
+    if (plateNo === "") {
+      window.alert("empty fields");
+      return;
+    }
+    try {
+      const url = `/api/v1/vehicle/${plateNo}`;
+      const response = await axios.post(url);
+
+      //if number plate is modern
+      if (response.data.data === "modern") {
+        const response = await modern(plateNo);
+        console.log(response);
+        setValidateStatus(response);
+
+        if (1) {setDisabled(false);} 
+        else {setDisabled(true);}
+
+      } else if (response.data.data === "vintage") {
+
+      } else if (response.data.data === "old") {
+      } else {
+        window.alert("error in validating");
+      }
+    } catch (error) {
+      console.log(error);
+      window.alert("error in server");
+    }
+  };
+  //to require validation if number plate is changed
+  useEffect(() => {
+    setValidateStatus(0);
+    setDisabled(true);
+  }, [plateNo]);
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+    console.log("works");
+  };
   return (
     <div>
       <nav class=" sm:px-4 py-5  bg-gray-900">
@@ -31,21 +89,24 @@ const Register = () => {
             <br />
           </div>
         </div>
-        <form className="rounded-lg bg-gray-50 shadow-2xl  p-10">
+        <form
+          onSubmit={onSubmit}
+          className="rounded-lg bg-gray-50 shadow-2xl  p-10"
+        >
           <div class="relative z-0 mb-6 w-full group">
             <input
               type="text"
-              name="floating_first_name"
-              id="floating_first_name"
+              name="name"
+              id="name"
               className="block py-2.5 px-0 w-full text-sm  bg-transparent border-0 border-b-2  appearance-none text-black border-gray-600 focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
               placeholder=" "
               required
             />
             <label
-              for="floating_first_name"
+              for="name"
               className="peer-focus:font-medium absolute text-sm text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
             >
-              First name
+              Name
             </label>
           </div>
           <div class="relative z-0 mb-6 w-full group">
@@ -90,6 +151,7 @@ const Register = () => {
                 className="block py-2.5 px-0 w-full text-sm  bg-transparent border-0 border-b-2  appearance-none text-black border-gray-600 focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                 placeholder=" "
                 required
+                onChange={(e) => setPlateNo(e.target.value)}
               />
               <label
                 for="plateNo"
@@ -98,7 +160,29 @@ const Register = () => {
                 Plate number (KN-7880)
               </label>
             </div>
-            <div class="relative z-0 mb-6 w-full group">Type of vehicle</div>
+            <div class="relative z-0 mb-6 w-full group">
+              {plateNo}
+              <button onClick={validatePlate}>
+                {/* if needed to be validated */}
+                {validateStatus === 0 && (
+                  <div class=" hover:bg-gray-300 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded bg-blue-300 text-green">
+                    validate number plate
+                  </div>
+                )}
+                {/* if failed to validate */}
+                {validateStatus === -1 && (
+                  <div class=" hover:bg-gray-300 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded bg-red-300 text-black">
+                    invalid number plate (re-try)
+                  </div>
+                )}
+                {/* if validated succesfully */}
+                {validateStatus === 1 && (
+                  <div class=" hover:bg-gray-300 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded bg-green-300 text-black">
+                    validated
+                  </div>
+                )}
+              </button>
+            </div>
           </div>
           <div class="grid md:grid-cols-2 md:gap-6">
             <div class="relative z-0 mb-6 w-full group">
@@ -136,12 +220,27 @@ const Register = () => {
               </label>
             </div>
           </div>
-          <button
-            type="submit"
-            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-          >
-            Submit
-          </button>
+          {disabled === true && (
+            <>
+              <button
+                title="Validate Plate"
+                type="submit"
+                class="text-white hover:bg-red-500 bg-blue-500 cursor-not-allowed font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                disabled={disabled}
+              >
+                Register
+              </button>
+            </>
+          )}
+          {disabled === false && (
+            <button
+              type="submit"
+              class="text-white hover:bg-green-700 bg-blue-500 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+              disabled={disabled}
+            >
+              Register
+            </button>
+          )}
         </form>
       </div>
     </div>
