@@ -16,8 +16,11 @@ app.use(bodyParser.json());
 
 
 //get routes
+const AuthRoutes=require('./Routes/Auth.Routes')
+const VehicleRoutes=require('./Routes/Vehicle.Routes')
 //use routes
-
+app.use("/api/v1/auth",AuthRoutes);
+app.use("/api/v1/vehicle",VehicleRoutes);
 
 //sample server side
 app.get("/", (req, res) => {
