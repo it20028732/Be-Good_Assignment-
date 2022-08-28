@@ -85,16 +85,19 @@ const deleteVehicle = asyncHandler(async (req, res) => {
     res.send({ msg: "errorr" });
   } 
 });
+//update vehicle
 const updateVehicle = asyncHandler(async (req, res) => {
   const filter={_id:req.params.docID}
-  var { plateNo,chassisNo } = req.body;
+  var { Name,email,plateNo,chassisNo } = req.body;
 
-  if(!plateNo,!chassisNo){
+  if(!Name || !email || !plateNo || !chassisNo){
     res.send({ msg: "fields cannot be empty" });
     return;
   }
   try {
     const response = await Vehicle_Details.updateOne(filter, {
+      Name,
+      email,
       plateNo,
       chassisNo
     });
