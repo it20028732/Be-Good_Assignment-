@@ -45,6 +45,7 @@ const AdminDashboard = () => {
           Admin Page
         </h1>
       </div>
+      <div class="flex justify-center ..."><p className="text-gray-500">All Registered Vehicles</p></div>
       <div className="p-10 ">
         <table id="myTable" className="w-full  text-left text-sm text-gray-400">
           <thead className="bg-gray-800  text-xs uppercase text-gray-200 ">
