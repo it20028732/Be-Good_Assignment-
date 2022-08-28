@@ -4,11 +4,15 @@ import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 import { reset } from "../../features/authSlice";
 import { logout } from "../../features/authSlice";
+import UpdateAcc from "./SubComponents/UpdateAcc";
 
 const CustomerDashboard = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.auth);
+
+  //click event to load update component
+  const [update, setUpdate] = useState(false);
 
   useEffect(() => {
     console.log(user.user.docID);
@@ -79,7 +83,11 @@ const CustomerDashboard = () => {
                   {user.user.chassisNo}
                 </div>
                 <div class="flex justify-start ...">
-                  <button class="  bg-green-700  hover:bg-green-300 hover:text-black text-white font-bold py-2 px-4 rounded inline-flex items-center">
+                  <button class="  bg-green-700  hover:bg-green-300 hover:text-black text-white font-bold py-2 px-4 rounded inline-flex items-center"
+                     onClick={() => {
+                      setUpdate(true);
+                    }}
+                  >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
@@ -123,6 +131,7 @@ const CustomerDashboard = () => {
             <span>Delete Account</span>
           </button>
         </div>
+        {update && <UpdateAcc  setUpdate={setUpdate} />}
       </div>
     </>
   );
