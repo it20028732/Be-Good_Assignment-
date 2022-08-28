@@ -11,8 +11,8 @@ const {authenticateReg,authorizePermissions}=require('../middleware/authenticati
 router.route('/:type').post(Vtype);
 router.route('/home/:docID').get(getOneVehicle);
 router.route('/getall').get(authenticateReg,authorizePermissions('admin'),getAllVehicle)
-router.route('/deletevehicle/:docID').delete(authenticateReg,deleteVehicle)
-router.route('/updatevehicle/:docID').post(authenticateReg,updateVehicle)
+router.route('/deletevehicle/:docID').delete(deleteVehicle)
+router.route('/updatevehicle/:docID').post(updateVehicle)
 
 
 module.exports = router
